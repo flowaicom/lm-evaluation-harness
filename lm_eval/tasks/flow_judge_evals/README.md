@@ -29,7 +29,7 @@ pip install -e ".[vllm,hf_transfer,api]
 Example:
 
 ```bash
-./lm_eval/tasks/flow_judge_evals/run_vllm_eval.sh binary_heldout_test,covid_qa_halubench flowaicom/judge-3.8b-binary-12092024-dora
+./lm_eval/tasks/flow_judge_evals/run_vllm_eval.sh binary_heldout_test,covid_qa_halubench flowaicom/Flow-Judge-v0.1
 ```
 
 ## vLLM

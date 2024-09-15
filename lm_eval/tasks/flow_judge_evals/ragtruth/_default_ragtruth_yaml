@@ -1,0 +1,43 @@
+dataset_path: flowaicom/RAGTruth_test
+
+training_split: null
+validation_split: null
+
+doc_to_text: !function common_utils.format_prompt
+doc_to_target: !function common_utils.format_target
+
+filter_list:
+  - name: score_parser
+    filter:
+      - function: "regex"
+        group_select: -1
+        regex_pattern: "<score>\\s*(\\d+)\\s*</score>"
+      - function: "map"
+        mapping_dict:
+          "0": 0
+          "1": 1
+        default_value: ""
+      - function: "take_first"
+
+output_type: generate_until
+generation_kwargs:
+  temperature: 0.1
+  top_p: 0.95
+  do_sample: true
+  
+metric_list:
+  - metric: !function common_utils.accuracy
+    aggregation: !function common_utils.accuracy_agg
+    higher_is_better: true
+  - metric: !function common_utils.f1_binary
+    aggregation: !function common_utils.f1_agg_binary
+    higher_is_better: true
+  - metric: !function common_utils.precision_binary
+    aggregation: !function common_utils.precision_agg_binary
+    higher_is_better: true
+  - metric: !function common_utils.recall_binary
+    aggregation: !function common_utils.recall_agg_binary
+    higher_is_better: true
+
+metadata:
+  version: 0.1

@@ -1,0 +1,52 @@
+task: 3_likert_heldout_test
+include: _default_heldout_test_yaml
+dataset_path: flowaicom/Flow-Judge-v0.1-3-likert-heldout
+
+filter_list:
+  - name: score_parser
+    filter:
+      - function: "regex"
+        group_select: -1
+        regex_pattern: "<score>\\s*(\\d+)\\s*</score>"
+      - function: "map"
+        mapping_dict:
+          "1": 1
+          "2": 2
+          "3": 3
+        default_value: "" # To avoid resulting in NoneType error - metrics.py can handle empty strings
+      - function: "take_first"
+
+metric_list:
+  - metric: !function utils.accuracy
+    aggregation: !function utils.accuracy_agg
+    higher_is_better: true
+  - metric: !function utils.f1_macro_3likert
+    aggregation: !function utils.f1_agg_macro_3likert
+    higher_is_better: true
+  - metric: !function utils.f1_micro_3likert
+    aggregation: !function utils.f1_agg_micro_3likert
+    higher_is_better: true
+  - metric: !function utils.precision_macro_3likert
+    aggregation: !function utils.precision_agg_macro_3likert
+    higher_is_better: true
+  - metric: !function utils.precision_micro_3likert
+    aggregation: !function utils.precision_agg_micro_3likert
+    higher_is_better: true
+  - metric: !function utils.recall_macro_3likert
+    aggregation: !function utils.recall_agg_macro_3likert
+    higher_is_better: true
+  - metric: !function utils.recall_micro_3likert
+    aggregation: !function utils.recall_agg_micro_3likert
+    higher_is_better: true
+  - metric: !function utils.pearson_corr
+    aggregation: !function utils.pearson_corr_agg
+    higher_is_better: true
+  - metric: !function utils.spearman_corr
+    aggregation: !function utils.spearman_corr_agg
+    higher_is_better: true
+  - metric: !function utils.kendalltau_corr
+    aggregation: !function utils.kendalltau_corr_agg
+    higher_is_better: true
+
+metadata:
+  version: 0.0

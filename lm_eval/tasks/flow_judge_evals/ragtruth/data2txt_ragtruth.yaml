@@ -1,0 +1,8 @@
+task: data2txt_ragtruth
+include: _default_ragtruth_yaml
+test_split: data2txt
+
+process_docs: !function data2txt_utils.preprocess_records
+
+metadata:
+  version: 0.0

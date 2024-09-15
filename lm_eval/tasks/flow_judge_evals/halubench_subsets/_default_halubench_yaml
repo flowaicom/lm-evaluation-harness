@@ -1,0 +1,50 @@
+training_split: null
+validation_split: null
+
+doc_to_text: !function utils.format_prompt
+doc_to_target: !function utils.format_target
+
+filter_list:
+  - name: score_parser
+    filter:
+      - function: "regex"
+        group_select: -1
+        regex_pattern: "<score>\\s*(\\d+)\\s*</score>"
+      - function: "map"
+        mapping_dict:
+          "0": 0
+          "1": 1
+        default_value: ""
+      - function: "take_first"
+
+output_type: generate_until
+generation_kwargs:
+  temperature: 0.1
+  top_p: 0.95
+  do_sample: true
+  
+metric_list:
+  - metric: !function utils.accuracy
+    aggregation: !function utils.accuracy_agg
+    higher_is_better: true
+  - metric: !function utils.f1_binary
+    aggregation: !function utils.f1_agg_binary
+    higher_is_better: true
+  - metric: !function utils.precision_binary
+    aggregation: !function utils.precision_agg_binary
+    higher_is_better: true
+  - metric: !function utils.recall_binary
+    aggregation: !function utils.recall_agg_binary
+    higher_is_better: true
+  - metric: !function utils.pearson_corr
+    aggregation: !function utils.pearson_corr_agg
+    higher_is_better: true
+  - metric: !function utils.spearman_corr
+    aggregation: !function utils.spearman_corr_agg
+    higher_is_better: true
+  - metric: !function utils.kendalltau_corr
+    aggregation: !function utils.kendalltau_corr_agg
+    higher_is_better: true
+
+metadata:
+  version: 0.0

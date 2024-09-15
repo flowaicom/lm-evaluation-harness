@@ -1,0 +1,44 @@
+task: feedbackbench_prometheus
+dataset_path: flowaicom/Feedback-Bench
+training_split: null
+validation_split: null
+test_split: "test"
+
+doc_to_text: !function feedbackbench_prometheus_utils.format_prompt_prometheus
+doc_to_target: !function feedbackbench_prometheus_utils.format_orig_score
+
+output_type: generate_until
+generation_kwargs:
+  temperature: 0.1
+  top_p: 0.95
+  do_sample: true
+
+filter_list:
+  - name: score_parser
+    filter:
+      - function: "regex"
+        group_select: -1
+        regex_pattern: "(?:\\[RESULT\\]|Score|\\[SCORE\\]|\\[RESULT\\]:|Score:|score:|Result:|\\[Result\\]|score of)\\s*(?:\\(\\s*|\\[\\s*|)\\s*(\\d+)"
+      - function: "map"
+        mapping_dict:
+          "1": 1
+          "2": 2
+          "3": 3
+          "4": 4
+          "5": 5
+        default_value: "" # To avoid resulting in NoneType error - metrics.py can handle empty strings
+      - function: "take_first"
+
+metric_list:  
+  - metric: !function feedbackbench_prometheus_utils.pearson_corr
+    aggregation: !function feedbackbench_prometheus_utils.pearson_corr_agg
+    higher_is_better: true
+  - metric: !function feedbackbench_prometheus_utils.spearman_corr
+    aggregation: !function feedbackbench_prometheus_utils.spearman_corr_agg
+    higher_is_better: true
+  - metric: !function feedbackbench_prometheus_utils.kendalltau_corr
+    aggregation: !function feedbackbench_prometheus_utils.kendalltau_corr_agg
+    higher_is_better: true
+
+metadata:
+  version: 0.0

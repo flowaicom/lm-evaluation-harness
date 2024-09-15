@@ -1,0 +1,10 @@
+task: pubmedqa_halubench
+include: _default_halubench_yaml
+dataset_path: flowaicom/PubMedQA
+test_split: test
+tag: halubench_subsets
+
+process_docs: !function utils.preprocess_records
+
+metadata:
+  version: 0.0

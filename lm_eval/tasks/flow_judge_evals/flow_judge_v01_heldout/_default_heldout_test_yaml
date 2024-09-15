@@ -1,0 +1,17 @@
+training_split: null
+validation_split: null
+test_split: "test"
+
+process_docs: !function utils.preprocess_records
+
+doc_to_text: !function utils.format_prompt
+doc_to_target: !function utils.format_target
+
+output_type: generate_until
+generation_kwargs:
+  temperature: 0.1
+  top_p: 0.95
+  do_sample: true
+
+metadata:
+  version: 0.1

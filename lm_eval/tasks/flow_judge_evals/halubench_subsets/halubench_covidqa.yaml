@@ -1,0 +1,10 @@
+task: covid_qa_halubench
+include: _default_halubench_yaml
+dataset_path: flowaicom/covid_qa
+test_split: test 
+tag: halubench_subsets
+
+process_docs: !function utils.preprocess_records
+
+metadata:
+  version: 0.0

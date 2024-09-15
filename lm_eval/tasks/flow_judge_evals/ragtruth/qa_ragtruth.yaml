@@ -1,0 +1,8 @@
+task: qa_ragtruth
+include: _default_ragtruth_yaml
+test_split: qa
+
+process_docs: !function qa_utils.preprocess_records
+
+metadata:
+  version: 0.0

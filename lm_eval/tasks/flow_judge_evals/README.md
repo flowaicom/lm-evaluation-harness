@@ -43,7 +43,7 @@ Choose tasks and a model. Then run the following command:
 Note. You need a cuda-enabled GPU to run this command. You can choose which GPU to use by setting the `CUDA_VISIBLE_DEVICES` environment variable. You should also set the number of threads to use for the model with `OMP_NUM_THREADS`.
 
 ## OpenAI Chat Completions
-Choose a tasks and a model. Then run the following command:
+Choose tasks and a model. Then run the following command:
 
 ```bash
 ./lm_eval/tasks/flow_judge_evals/run_openai_eval.sh <task_names> <model_path_or_name>
